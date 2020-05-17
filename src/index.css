@@ -1,0 +1,12 @@
+.wKey {
+    background-color: white;
+    color: rgb(70, 70, 70);
+}
+.bKey {
+    background-color: rgb(70, 70, 70);
+    color: white;
+}
+.piano-key {
+    height: 100px;
+    width: 30px;
+}
