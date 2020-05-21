@@ -10,3 +10,11 @@
     height: 100px;
     width: 30px;
 }
+
+.connected {
+    color: rgb(6, 156, 106);
+}
+
+.disconnected {
+    color: rgb(160, 57, 57);
+}

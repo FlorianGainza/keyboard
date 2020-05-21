@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons'
 
 class Key extends React.Component {
   constructor(props) {
@@ -16,8 +18,9 @@ class Key extends React.Component {
 
     return (
       <button
-        onClick={this.props.onClick}
-        class={this.props.class + " piano-key"}
+        onMouseDown={this.props.onMouseDown}
+        onMouseUp={this.props.onMouseUp}
+        className={this.props.class + " piano-key"}
       >
         {this.props.value}
       </button>
@@ -30,17 +33,19 @@ class Piano extends React.Component {
   constructor(props) {
     super(props);
     this.ws = new WebSocket('ws://localhost:8080/synt');
-
-    this.ws.onopen = function (evt) {
+    this.state = { status : props.status };
+    this.ws.onopen = (evt) => {
+      this.setState({status : 'connected'});
       console.log('OPEN');
     }
 
-    this.ws.onclose = function (evt) {
+    this.ws.onclose = (evt) => {
+      this.setState({status : 'disconnected'});
       console.log('CLOSE');
       this.ws = null;
     }
 
-    this.ws.onmessage = function (evt) {
+    this.ws.onmessage = (evt) => {
       var note = new Audio();
       var blob = new Blob([evt.data], { type: 'audio/wave' });
       note.src = window.URL.createObjectURL(blob);
@@ -57,7 +62,8 @@ class Piano extends React.Component {
     return (
       <Key
         value={pitch}
-        onClick={() => this.ws.send(pitch)}
+        onMouseDown={() => this.ws.send(pitch)}
+        onMouseUp={() => this.ws.send('!' + pitch)}
         class={isWhite ? 'wKey' : 'bKey'}
       />
     );
@@ -65,7 +71,8 @@ class Piano extends React.Component {
 
   render() {
     return (
-      <div class="piano">
+      <div className="piano">
+        <FontAwesomeIcon icon={faExchangeAlt} className={this.state.status}/>
         {this.renderKey('c', true)}
         {this.renderKey('c#', false)}
         {this.renderKey('d', true)}
@@ -84,6 +91,6 @@ class Piano extends React.Component {
 }
 
 ReactDOM.render(
-  <Piano />,
+  <Piano status="disconnected" />,
   document.getElementById('keyboard_container')
 );
