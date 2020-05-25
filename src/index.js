@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons'
+import StreamAudio from './stream-audio.js'
 
 class Key extends React.Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class Piano extends React.Component {
 
   constructor(props) {
     super(props);
+    this.stream = new StreamAudio();
     this.ws = new WebSocket('ws://localhost:8080/synt');
     this.state = { status : props.status };
     this.ws.onopen = (evt) => {
@@ -46,15 +48,12 @@ class Piano extends React.Component {
     }
 
     this.ws.onmessage = (evt) => {
-      var note = new Audio();
-      var blob = new Blob([evt.data], { type: 'audio/wave' });
-      note.src = window.URL.createObjectURL(blob);
-      note.play();
+      this.stream.loadChunck(evt.data);
       console.log('RESPONSE: ' + evt.data);
     }
 
     this.ws.onerror = function (evt) {
-      console.log('ERROR: ' + evt.data);
+      console.log('ERROR: ' + evt);
     }
   }
 
