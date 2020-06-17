@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import { AudioUtil } from './audio-util'
+import AudioUtil from './audio-util'
 
 describe('Check wave data', () => {
 
