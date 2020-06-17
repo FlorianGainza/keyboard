@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons'
-import StreamAudio from './stream-audio.js'
+import StreamAudio from './stream-audio'
 
 class Key extends React.Component {
   constructor(props) {
